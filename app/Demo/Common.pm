@@ -1,14 +1,14 @@
 package Demo::Common;
-use DBIx::Struct;
+use Demo::Schema;
 use base 'Exporter';
 our @EXPORT = qw{
-  get_author_from_auth
+	get_author_from_auth
 };
 
 sub get_author_from_auth {
 	my $auth = $_[0];
-	DBC::AuthorAuth->delete({expires => {'<', \"now()"}});
-	my $author_auth = one_row(author_auth => {auth => $auth});
+	$Demo::Schema::s->resultset('AuthorAuth')->search({expires => {'<', \"now()"}})->delete_all;
+	my $author_auth = $Demo::Schema::s->resultset('AuthorAuth')->search({auth => $auth})->first;
 	return if not $author_auth;
 	$author_auth->Author;
 }

@@ -1,5 +1,5 @@
 package Demo::InFilter::Default;
-use DBIx::Struct;
+use Demo::Schema;
 use Demo::Common;
 use PEF::Front::Session;
 use Digest::MD5 qw(md5_hex);
@@ -32,7 +32,7 @@ sub auth_to_author {
 		$field =~ s/&/&amp;/g;
 		$field =~ s/</&lt;/g;
 		$field =~ s/>/&gt;/g;
-		my $fake_author = one_row(author => {name => $field});
+		my $fake_author = $Demo::Schema::s->resultset('Author')->search({name => $field})->first;
 		if ($fake_author) {
 			$field = "(fake) $field";
 		}

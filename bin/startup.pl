@@ -3,13 +3,10 @@
 use lib qw'app /home/pef/pef-front-psgi-dist/lib /home/pef/dbix-struct/lib';
 
 use Demo::AppFrontConfig;
+use PEF::Front::Connector;
 use PEF::Front::Preload;
-use DBIx::Struct (
-	connector_module => 'PEF::Front::Connector',
-	error_class      => 'DBIx::Struct::Error::Hash'
-);
-
-DBIx::Struct::connect();
+use Demo::Schema;
+my $schema = Demo::Schema->connect([sub {db_connect->dbh}]);
 
 use PEF::Front::Route (
 	'/'               => ['/index', 'R'],
